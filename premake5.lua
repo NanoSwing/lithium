@@ -19,9 +19,9 @@ project "lithium"
 		"LI_BUILD_DLL"
 	}
 
-	postbuildcommands {
-		("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/testbed")
-	}
+	-- postbuildcommands {
+	-- 	("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/testbed/%{cfg.buildtarget.name}")
+	-- }
 
 	filter "configurations:Debug"
 		defines "LI_DEBUG"

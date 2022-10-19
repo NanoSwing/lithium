@@ -3,20 +3,26 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <sys/mman.h>
 #include <unistd.h>
 
 int main(void)
 {
-	// Reserve 4 GB
-	void *ptr = liMemoryReserve(4 * 10E9);
+	// Reserve 2 GB
+	U64 size = liGigabytes(2);
+	void *ptr = liMemoryReserve(size);
 	
-	// 1 Gigabyte
-	Usize commit_size = (1 * 10E9) / 8;
-	liMemoryCommit(ptr, commit_size);
-	memset(ptr, 0, commit_size);
+	// Commit 1 GB
+	U64 commit = liGigabytes(1);
+	liMemoryCommit(ptr, commit);
+	memset(ptr, 0, commit);
 
-	liMemoryDecommit(ptr, commit_size);
+	sleep(2);
+
+	liMemoryDecommit(ptr, commit);
 	liMemoryRelease(ptr);
+
+	sleep(2);
 
 	return 0;
 }

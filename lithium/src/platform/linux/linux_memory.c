@@ -1,4 +1,5 @@
 #include "base/base_context_crack.h"
+#include "base/base_types.h"
 
 #ifdef LI_OS_LINUX
 
@@ -14,42 +15,46 @@
 // Decommit memory - madvise
 // Free memory     - munmap
 
-void *liMemoryReserve(Usize size)
+#include <stdio.h>
+
+static U64 internal_liSnapToPages(U64 value)
 {
-	// Snap memory to page size
-	I32 snapped = size;
+	U64 snapped = value;
 	snapped += getpagesize() - 1;
 	snapped -= snapped % getpagesize();
-
-	void *ptr = mmap(NULL, size, PROT_NONE, MAP_PRIVATE | MAP_ANON, -1, 0);
-	return ptr;
+	return snapped;
 }
 
-void liMemoryCommit(void *ptr, Usize size)
+void *liMemoryReserve(U64 size)
 {
-	// Snap memory to page size
-	I32 snapped = size;
-	snapped += getpagesize() - 1;
-	snapped -= snapped % getpagesize();
+	U64 snapped = internal_liSnapToPages(size + sizeof(U64));
+	U64 *ptr = mmap(NULL, snapped, PROT_NONE, MAP_PRIVATE | MAP_ANON, -1, 0);
+	mprotect(ptr, sizeof(U64), PROT_READ | PROT_WRITE);
+	*ptr = snapped;
+	printf("%llu\n", snapped);
 
-	mprotect(ptr, size, PROT_READ | PROT_WRITE);
-	madvise(ptr, size, MADV_WILLNEED);
+	return (void *) ptr + sizeof(U64);
 }
 
-void liMemoryDecommit(void *ptr, Usize size)
+void liMemoryCommit(void *ptr, U64 size)
 {
-	// Snap memory to page size
-	I32 snapped = size;
-	snapped += getpagesize() - 1;
-	snapped -= snapped % getpagesize();
+	void *correct_ptr = ptr - sizeof(U64);
+	U64 snapped = internal_liSnapToPages(size + sizeof(U64));
+	mprotect(correct_ptr, snapped, PROT_READ | PROT_WRITE);
+	madvise(correct_ptr, snapped, MADV_WILLNEED);
+}
 
+void liMemoryDecommit(void *ptr, U64 size)
+{
 	mprotect(ptr, size, PROT_NONE);
 	madvise(ptr, size, MADV_DONTNEED);
 }
 
 void liMemoryRelease(void *ptr)
 {
-	munmap(ptr, 0);
+	void *correct_ptr = ptr - sizeof(U64);
+	U64 size = *(U64 *) correct_ptr;
+	munmap(correct_ptr, size);
 }
 
 #endif // LI_OS_LINUX
