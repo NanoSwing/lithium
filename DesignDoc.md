@@ -1,15 +1,23 @@
 # Layers
 ## Base
-Type definitions
-Context cracking
-Memory arena
-Strings
-Util macros
-API defines
+- [X] Type definitions
+- [X] Context cracking
+- [ ] Memory arena
+- [ ] Strings
+- [ ] Util macros
+- [X] API defines
+- [ ] Logging
 
 ## Platform
-Threading
-Time
-File
-Networking
-Memory management
+### Linux
+- [X] Threading
+- [ ] Time
+- [ ] File
+- [ ] Networking
+- [X] Memory management
+### Windows
+- [ ] Threading
+- [ ] Time
+- [ ] File
+- [ ] Networking
+- [ ] Memory management

@@ -4,5 +4,6 @@
 #include "base/base_context_crack.h"
 #include "base/base_types.h"
 #include "base/base_defines.h"
+#include "base/base_memory_arena.h"
 
 #endif // LI_BASE_INCLUDE_H

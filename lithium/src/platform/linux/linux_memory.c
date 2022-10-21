@@ -15,8 +15,6 @@
 // Decommit memory - madvise
 // Free memory     - munmap
 
-#include <stdio.h>
-
 static U64 internal_liSnapToPages(U64 value)
 {
 	U64 snapped = value;
@@ -31,7 +29,6 @@ void *liMemoryReserve(U64 size)
 	U64 *ptr = mmap(NULL, snapped, PROT_NONE, MAP_PRIVATE | MAP_ANON, -1, 0);
 	mprotect(ptr, sizeof(U64), PROT_READ | PROT_WRITE);
 	*ptr = snapped;
-	printf("%llu\n", snapped);
 
 	return (void *) ptr + sizeof(U64);
 }

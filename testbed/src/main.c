@@ -1,28 +1,46 @@
-#include "platform/platform_memory.h"
+#include "platform/platform_threading.h"
 #include <lithium.h>
 
+#include <stddef.h>
 #include <stdio.h>
-#include <string.h>
-#include <sys/mman.h>
-#include <unistd.h>
+
+LiMutex *lock;
+
+#define COUNT_TO ((U64) 1E6)
+
+void *threadFunc(void *arg)
+{
+	(void) arg;
+
+	static U64 i = 0;
+
+	for (;;) {
+		liMutexLock(lock);
+
+		if (i >= COUNT_TO) {
+			liMutexUnlock(lock);
+			return NULL;
+		}
+		i++;
+
+		liMutexUnlock(lock);
+		printf("%llu\n", i);
+	}
+}
 
 int main(void)
 {
-	// Reserve 2 GB
-	U64 size = liGigabytes(2);
-	void *ptr = liMemoryReserve(size);
-	
-	// Commit 1 GB
-	U64 commit = liGigabytes(1);
-	liMemoryCommit(ptr, commit);
-	memset(ptr, 0, commit);
+	lock = liMutexCreate();
 
-	sleep(2);
+	LiThread thread[8];
+	for (U32 i = 0; i < 8; i++) {
+		thread[i] = liThreadCreate(threadFunc, NULL);
+	}
+	for (U32 i = 0; i < 8; i++) {
+		liThreadWait(thread[i], NULL);
+		liThreadDestroy(thread[i]);
+	}
 
-	liMemoryDecommit(ptr, commit);
-	liMemoryRelease(ptr);
-
-	sleep(2);
-
+	liMutexDestroy(lock);
 	return 0;
 }
