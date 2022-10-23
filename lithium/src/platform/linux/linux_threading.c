@@ -18,16 +18,8 @@ LiThread liThreadCreate(LiThreadFunc thread_func, void *arg)
 	return (LiThread) thread;
 }
 
-void liThreadDestroy(LiThread thread)
-{
-	(void) thread;
-	return;
-}
-
-void liThreadWait(LiThread thread, void **output)
-{
-	pthread_join(thread, output);
-}
+void liThreadDestroy(LiThread thread) { (void) thread; }
+void liThreadWait(LiThread thread, void **output) { pthread_join(thread, output); }
 
 LiMutex *liMutexCreate(void)
 {
@@ -39,17 +31,12 @@ LiMutex *liMutexCreate(void)
 
 void liMutexDestroy(LiMutex *mutex)
 {
+	pthread_mutex_destroy(&mutex->mutex);
 	liMemoryRelease(mutex);
 }
 
-void liMutexLock(LiMutex *mutex)
-{
-	pthread_mutex_lock(&mutex->mutex);
-}
-
-void liMutexUnlock(LiMutex *mutex)
-{
-	pthread_mutex_unlock(&mutex->mutex);
-}
+void liMutexLock(LiMutex *mutex) { pthread_mutex_lock(&mutex->mutex); }
+void liMutexUnlock(LiMutex *mutex) { pthread_mutex_unlock(&mutex->mutex); }
+LiThread liThreadGetSelf(void) { return pthread_self(); }
 
 #endif // LI_OS_LINUX

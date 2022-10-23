@@ -11,6 +11,7 @@ typedef void *(*LiThreadFunc)(void *arg);
 LIAPI LiThread liThreadCreate(LiThreadFunc thread_func, void *arg);
 LIAPI void liThreadDestroy(LiThread thread);
 LIAPI void liThreadWait(LiThread thread, void **output);
+LIAPI LiThread liThreadGetSelf(void);
 
 LIAPI LiMutex *liMutexCreate(void);
 LIAPI void liMutexDestroy(LiMutex *mutex);

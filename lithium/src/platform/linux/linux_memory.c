@@ -54,4 +54,9 @@ void liMemoryRelease(void *ptr)
 	munmap(correct_ptr, size);
 }
 
+U64 liMemoryCalculateCommit(U64 size)
+{
+	return internal_liSnapToPages(size);
+}
+
 #endif // LI_OS_LINUX

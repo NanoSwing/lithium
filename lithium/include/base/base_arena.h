@@ -3,6 +3,7 @@
 
 #include "base/base_types.h"
 #include "base/base_defines.h"
+#include "platform/platform_threading.h"
 
 typedef struct LiArena LiArena;
 typedef struct {
@@ -18,7 +19,7 @@ LIAPI void *liArenaPushZero(LiArena *arena, U64 size);
 LIAPI void liArenaPop(LiArena *arena, U64 size);
 LIAPI void liArenaReset(LiArena *arena);
 
-LIAPI LiArenaTemp *liArenaTempBegin(LiArena *arena);
-LIAPI void liArenaTempEnd(LiArenaTemp *arena);
+LIAPI LiArenaTemp liArenaTempBegin(LiArena *arena);
+LIAPI void liArenaTempEnd(LiArenaTemp arena);
 
 #endif // LI_BASE_ARENA_H

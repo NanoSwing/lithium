@@ -8,6 +8,7 @@ LIAPI void *liMemoryReserve(U64 size);
 LIAPI void liMemoryCommit(void *ptr, U64 size);
 LIAPI void liMemoryDecommit(void *ptr, U64 size);
 LIAPI void liMemoryRelease(void *ptr);
+LIAPI U64 liMemoryCalculateCommit(U64 size);
 
 // Helpers
 #define liGigabytes(n) ((U64) n << 30)
