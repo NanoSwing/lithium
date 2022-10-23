@@ -5,5 +5,6 @@
 #include "base/base_types.h"
 #include "base/base_defines.h"
 #include "base/base_arena.h"
+#include "base/base_string.h"
 
 #endif // LI_BASE_INCLUDE_H
