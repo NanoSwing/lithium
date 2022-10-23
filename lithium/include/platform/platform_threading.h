@@ -3,6 +3,7 @@
 
 #include "base/base_types.h"
 #include "base/base_defines.h"
+#include "base/base_arena.h"
 
 typedef U64 LiThread;
 typedef struct LiMutex LiMutex;
@@ -13,7 +14,7 @@ LIAPI void liThreadDestroy(LiThread thread);
 LIAPI void liThreadWait(LiThread thread, void **output);
 LIAPI LiThread liThreadGetSelf(void);
 
-LIAPI LiMutex *liMutexCreate(void);
+LIAPI LiMutex *liMutexCreate(LiArena *arena);
 LIAPI void liMutexDestroy(LiMutex *mutex);
 LIAPI void liMutexLock(LiMutex *mutex);
 LIAPI void liMutexUnlock(LiMutex *mutex);

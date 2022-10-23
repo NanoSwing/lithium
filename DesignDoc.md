@@ -2,7 +2,7 @@
 ## Base
 - [X] Type definitions
 - [X] Context cracking
-- [ ] Memory arena
+- [X] Memory arena
 - [ ] Strings
 - [ ] Util macros
 - [X] API defines
@@ -11,13 +11,15 @@
 ## Platform
 ### Linux
 - [X] Threading
-- [ ] Time
+- [X] Time
 - [ ] File
 - [ ] Networking
 - [X] Memory management
+- [ ] Dynamic library loading
 ### Windows
 - [ ] Threading
 - [ ] Time
 - [ ] File
 - [ ] Networking
 - [ ] Memory management
+- [ ] Dynamic library loading

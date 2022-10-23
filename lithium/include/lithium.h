@@ -4,4 +4,4 @@
 #include "base/base_include.h"
 #include "platform/platform_include.h"
 
-#endif
+#endif // LI_LITHIUM_H

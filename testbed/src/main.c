@@ -1,6 +1,5 @@
+#include "platform/platform_time.h"
 #include <lithium.h>
-
-#include <stdio.h>
 
 int main(void)
 {
