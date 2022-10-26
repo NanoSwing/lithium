@@ -21,9 +21,9 @@ void liTimeSleep(U64 ms)
 	nanosleep(&ts, 0);
 }
 
-LiDate liTimeGetDate(void)
+LiDateTime liTimeGetDateTime(void)
 {
-	LiDate date = {0};
+	LiDateTime date = {0};
 
 	time_t t = time(NULL);
 	struct tm tm = *localtime(&t);

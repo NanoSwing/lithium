@@ -11,10 +11,10 @@ typedef struct {
 	U8 hour;
 	U8 minute;
 	U8 second;
-} LiDate;
+} LiDateTime;
 
 LIAPI F64 liTimeGet(void);
 LIAPI void liTimeSleep(U64 ms);
-LIAPI LiDate liTimeGetDate(void);
+LIAPI LiDateTime liTimeGetDateTime(void);
 
 #endif // LI_PLATFORM_TIME_H

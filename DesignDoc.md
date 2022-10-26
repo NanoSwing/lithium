@@ -9,17 +9,16 @@
 - [ ] Logging
 
 ## Platform
+- [X] Filesystem
 ### Linux
 - [X] Threading
 - [X] Time
-- [ ] File
 - [ ] Networking
 - [X] Memory management
 - [ ] Dynamic library loading
 ### Windows
 - [ ] Threading
 - [ ] Time
-- [ ] File
 - [ ] Networking
 - [ ] Memory management
 - [ ] Dynamic library loading

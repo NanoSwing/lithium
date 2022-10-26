@@ -1,5 +1,6 @@
 #include "base/base_arena.h"
 #include "base/base_types.h"
+#include "base/base_logging.h"
 #include "platform/platform_threading.h"
 #include "platform/platform_memory.h"
 
@@ -62,6 +63,7 @@ void *liArenaPush(LiArena *arena, U64 size)
 	}
 
 	if (arena->commit_pos > arena->max) {
+		liLogWarn("Arena out of memory!");
 		return NULL;
 	}
 

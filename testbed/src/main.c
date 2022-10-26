@@ -1,14 +1,18 @@
 #include <lithium.h>
 
 #include <stdio.h>
+#include <string.h>
 
 int main(void)
 {
 	LiArena *arena = liArenaCreate(liGigabytes(4), 8);
-	LiString str = liString(arena, "Cum");
-	LiString str2 = liStringSub(arena, "012345", 1, 3);
 
-	printf("'%s', %llu\n", str2.c_str, str2.length);
+	liLogFatal("Cool");
+	liLogError("Cool");
+	liLogWarn("Cool");
+	liLogInfo("Cool");
+	liLogDebug("Cool");
+	liLogTrace("Cool");
 
 	liArenaDestroy(arena);
 	return 0;
