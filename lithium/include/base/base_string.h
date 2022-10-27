@@ -10,9 +10,7 @@ typedef struct {
 	U64 length;
 } LiString;
 
-LIAPI LiString liString(const char *c_str);
+LIAPI LiString liString(char *c_str);
 LIAPI LiString liStringPush(LiArena *arena, const char *c_str);
-
-LIAPI LiString liStringSub(LiString string);
 
 #endif // LI_BASE_STRING_H

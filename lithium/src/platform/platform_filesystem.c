@@ -25,14 +25,14 @@ char *liFileRead(LiArena *arena, const char *filepath)
 	return buffer;
 }
 
-void liFileWrite(const char *filepath, const char *content, U64 content_length, LiFileWriteMode write_mode)
+void liFileWrite(const char *filepath, const LiString content, LiFileMode write_mode)
 {
 	char *write_type = NULL;
 	switch (write_mode) {
-		case LI_FILE_WRITE_MODE_BINARY:
+		case LI_FILE_MODE_BINARY:
 			write_type = "wb";
 			break;
-		case LI_FILE_WRITE_MODE_NORMAL:
+		case LI_FILE_MODE_NORMAL:
 			write_type = "w";
 			break;
 	}
@@ -41,7 +41,7 @@ void liFileWrite(const char *filepath, const char *content, U64 content_length, 
 		liLogError("Cannot create file '%s'\n", filepath);
 		return;
 	}
-	fwrite(content, content_length, 1, fp);
+	fwrite(content.c_str, content.length, 1, fp);
 	fclose(fp);
 }
 
@@ -55,13 +55,24 @@ void liFileCreate(const char *filepath)
 	fclose(fp);
 }
 
-void liFileAppend(const char *filepath, const char *content, U64 content_length)
+void liFileAppend(const char *filepath, const LiString content, LiFileMode append_mode)
 {
-	FILE *fp = fopen(filepath, "ab");
+	char *write_type = NULL;
+	switch (append_mode) {
+		case LI_FILE_MODE_BINARY:
+			write_type = "ab";
+			break;
+		case LI_FILE_MODE_NORMAL:
+			write_type = "a";
+			break;
+	}
+	FILE *fp = fopen(filepath, write_type);
 	if (!fp) {
 		liLogError("Cannot open file '%s'\n", filepath);
 		return;
 	}
+	fwrite(content.c_str, content.length, 1, fp);
+	fclose(fp);
 }
 
 B8 liFileExists(const char *filepath)
