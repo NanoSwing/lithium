@@ -19,6 +19,15 @@ project "lithium"
 		"LI_BUILD_DLL"
 	}
 
+	links {
+		"vulkan"
+	}
+
+	filter "system:linux"
+		links {
+			"X11"
+		}
+
 	filter "configurations:Debug"
 		defines "LI_DEBUG"
 		symbols "On"
