@@ -1,6 +1,4 @@
 #include "base/base_context_crack.h"
-#include "base/base_types.h"
-
 #ifdef LI_OS_LINUX
 
 #include "platform/platform_memory.h"

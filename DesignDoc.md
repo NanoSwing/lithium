@@ -6,7 +6,7 @@
 - [ ] Strings
 - [ ] Util macros
 - [X] API defines
-- [ ] Logging
+- [X] Logging
 
 ## Platform
 - [X] Filesystem
@@ -16,9 +16,11 @@
 - [ ] Networking
 - [X] Memory management
 - [ ] Dynamic library loading
+- [X] Windowing
 ### Windows
 - [ ] Threading
 - [ ] Time
 - [ ] Networking
 - [ ] Memory management
 - [ ] Dynamic library loading
+- [ ] Windowing

@@ -33,8 +33,8 @@ void liLog(LiLogLevel level, const char *file, U32 line, const char *format, ...
 		"\033[7;31m",
 		"\033[0;91m",
 		"\033[0;33m",
-		"\033[0;92m",
-		"\033[0;94m",
+		"",
+		"\033[0;34m",
 		"\033[0;35m"
 	};
 	printf("%s%.2d:%.2d:%.2d %s %s:%d: %s\033[0;0m\n", color[level], time.hour, time.minute, time.second, prefix[level], file, line, buffer);

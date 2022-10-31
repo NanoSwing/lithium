@@ -1,5 +1,4 @@
 #include "base/base_context_crack.h"
-
 #ifdef LI_OS_LINUX
 
 #include "platform/platform_time.h"
