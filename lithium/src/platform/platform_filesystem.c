@@ -3,11 +3,11 @@
 
 #include <stdio.h>
 
-char *liFileRead(LiArena *arena, const char *filepath)
+char *liFileRead(LiArena *arena, const char *filename)
 {
-	FILE *fp = fopen(filepath, "rb");
+	FILE *fp = fopen(filename, "rb");
 	if (!fp) {
-		liLogError("Cannot open file '%s'\n", filepath);
+		liLogError("Cannot open file '%s'\n", filename);
 		return NULL;
 	}
 	// Get file length.
@@ -25,7 +25,7 @@ char *liFileRead(LiArena *arena, const char *filepath)
 	return buffer;
 }
 
-void liFileWrite(const char *filepath, const LiString content, LiFileMode write_mode)
+void liFileWrite(const char *filename, const LiString content, LiFileMode write_mode)
 {
 	char *write_type = NULL;
 	switch (write_mode) {
@@ -36,26 +36,26 @@ void liFileWrite(const char *filepath, const LiString content, LiFileMode write_
 			write_type = "w";
 			break;
 	}
-	FILE *fp = fopen(filepath, write_type);
+	FILE *fp = fopen(filename, write_type);
 	if (!fp) {
-		liLogError("Cannot create file '%s'\n", filepath);
+		liLogError("Cannot create file '%s'\n", filename);
 		return;
 	}
 	fwrite(content.c_str, content.length, 1, fp);
 	fclose(fp);
 }
 
-void liFileCreate(const char *filepath)
+void liFileCreate(const char *filename)
 {
-	FILE *fp = fopen(filepath, "wb");
+	FILE *fp = fopen(filename, "wb");
 	if (!fp) {
-		liLogError("Cannot create file '%s'\n", filepath);
+		liLogError("Cannot create file '%s'\n", filename);
 		return;
 	}
 	fclose(fp);
 }
 
-void liFileAppend(const char *filepath, const LiString content, LiFileMode append_mode)
+void liFileAppend(const char *filename, const LiString content, LiFileMode append_mode)
 {
 	char *write_type = NULL;
 	switch (append_mode) {
@@ -66,18 +66,18 @@ void liFileAppend(const char *filepath, const LiString content, LiFileMode appen
 			write_type = "a";
 			break;
 	}
-	FILE *fp = fopen(filepath, write_type);
+	FILE *fp = fopen(filename, write_type);
 	if (!fp) {
-		liLogError("Cannot open file '%s'\n", filepath);
+		liLogError("Cannot open file '%s'\n", filename);
 		return;
 	}
 	fwrite(content.c_str, content.length, 1, fp);
 	fclose(fp);
 }
 
-B8 liFileExists(const char *filepath)
+B8 liFileExists(const char *filename)
 {
-	FILE *fp = fopen(filepath, "rb");
+	FILE *fp = fopen(filename, "rb");
 	if (fp) {
 		fclose(fp);
 		return true;
