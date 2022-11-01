@@ -7,7 +7,7 @@
 
 typedef struct LiWindow LiWindow;
 
-LIAPI LiWindow *liWindowCreate(LiArena *arena, U32 width, U32 height, const char *title);
+LIAPI LiWindow *liWindowCreate(LiArena *arena, U32 width, U32 height, const char *title, B8 resizable);
 LIAPI void liWindowDestroy(LiWindow *window);
 LIAPI void liWindowPollEvents(LiWindow *window);
 LIAPI B8 liWindowClosed(const LiWindow *window);

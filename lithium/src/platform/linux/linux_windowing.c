@@ -1,11 +1,11 @@
 #include "base/base_context_crack.h"
-#include <vulkan/vulkan_core.h>
 #ifdef LI_OS_LINUX
 
 #define VK_USE_PLATFORM_XCB_KHR
 #include "platform/platform_windowing.h"
 #include "base/base_logging.h"
 
+#include <xcb/xcb_icccm.h>
 #include <xcb/xcb.h>
 #include <string.h>
 #include <malloc.h>
@@ -19,7 +19,7 @@ struct LiWindow {
 	B8 closed;
 };
 
-LiWindow *liWindowCreate(LiArena *arena, U32 width, U32 height, const char *title)
+LiWindow *liWindowCreate(LiArena *arena, U32 width, U32 height, const char *title, B8 resizable)
 {
 	LiWindow *window = liArenaPush(arena, sizeof(LiWindow));
 	window->closed = false;
@@ -67,6 +67,47 @@ LiWindow *liWindowCreate(LiArena *arena, U32 width, U32 height, const char *titl
 		title
 	);
 
+	// Change reisziability
+	if (!resizable) {
+		typedef struct {
+			U32 flags;
+			I32 x, y;
+			I32 width, height;
+			I32 min_width, min_height;
+			I32 max_width, max_height;
+			I32 width_inc, height_inc;
+			I32 min_apsect_num, min_aspec_den;
+			I32 max_apsect_num, max_aspec_den;
+			I32 base_width, base_height;
+			U32 win_gravity;
+		} WMSizeHints;
+		typedef enum {
+			WM_SIZE_HINT_US_POSITION   = 1U << 0,
+			WM_SIZE_HINT_US_SIZE       = 1U << 1,
+			WM_SIZE_HINT_P_POSITION    = 1U << 2,
+			WM_SIZE_HINT_P_SIZE        = 1U << 3,
+			WM_SIZE_HINT_P_MIN_SIZE    = 1U << 4,
+			WM_SIZE_HINT_P_MAX_SIZE    = 1U << 5,
+			WM_SIZE_HINT_P_RESIZE_INC  = 1U << 6,
+			WM_SIZE_HINT_P_ASPECT      = 1U << 7,
+			WM_SIZE_HINT_BASE_SIZE     = 1U << 8,
+			WM_SIZE_HINT_P_WIN_GRAVITY = 1U << 9
+		} WMSizeHintsFlag;
+
+		WMSizeHints hints = {
+			.flags = WM_SIZE_HINT_P_WIN_GRAVITY,
+			.win_gravity = XCB_GRAVITY_STATIC
+		};
+
+		hints.flags |= WM_SIZE_HINT_P_MIN_SIZE | WM_SIZE_HINT_P_MAX_SIZE;
+		hints.min_width = width;
+		hints.min_height = height;
+		hints.max_width = width;
+		hints.max_height = height;
+
+		xcb_change_property(window->connection, XCB_PROP_MODE_REPLACE, window->window, XCB_ATOM_WM_NORMAL_HINTS, XCB_ATOM_WM_SIZE_HINTS, 32, sizeof(WMSizeHints) >> 2, &hints);
+	}
+
 	// Close button
 	xcb_intern_atom_cookie_t wm_delete_cookie = xcb_intern_atom(window->connection, 0, strlen("WM_DELETE_WINDOW"), "WM_DELETE_WINDOW");
 	xcb_intern_atom_cookie_t wm_protocols_cookie = xcb_intern_atom(window->connection, 0, strlen("WM_PROTOCOLS"), "WM_PROTOCOLS");
@@ -77,6 +118,7 @@ LiWindow *liWindowCreate(LiArena *arena, U32 width, U32 height, const char *titl
 
 	xcb_change_property(window->connection, XCB_PROP_MODE_REPLACE, window->window, wm_protocols_reply->atom, 4, 32, 1, &wm_delete_reply->atom);
 
+	// Send window to the X server
 	xcb_map_window(window->connection, window->window);
 	xcb_flush(window->connection);
 

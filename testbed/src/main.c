@@ -4,10 +4,9 @@ int main(void)
 {
 	LiArena *arena = liArenaCreate(liGigabytes(4), 8);
 
-	LiWindow *window = liWindowCreate(arena, 800, 600, "Vulkan window");
+	LiWindow *window = liWindowCreate(arena, 800, 600, "Vulkan window", false);
 
 	while (!liWindowClosed(window)) {
-		liLogInfo("Window open!");
 		liWindowPollEvents(window);
 	}
 
