@@ -5,9 +5,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-// TODO: Impelemnt multiline printing so when it encounters a \n it starts a new log message instead of just printing a new line.
-// Add file output.
-// Add windows coloring
 void liLog(LiLogLevel level, const char *file, U32 line, const char *format, ...)
 {
 	static const char *prefix[LI_LOG_LEVEL_COUNT] = {
@@ -37,9 +34,27 @@ void liLog(LiLogLevel level, const char *file, U32 line, const char *format, ...
 		"\033[0;34m",
 		"\033[0;35m"
 	};
-	printf("%s%.2d:%.2d:%.2d %s %s:%d: %s\033[0;0m\n", color[level], time.hour, time.minute, time.second, prefix[level], file, line, buffer);
+	// Print prefix.
+	printf("%s%.2d:%.2d:%.2d %s %s:%d: ", color[level], time.hour, time.minute, time.second, prefix[level], file, line);
+	for (U32 i = 0; buffer[i] != '\0'; i++) {
+		if (buffer[i] == '\n') {
+			printf("\n%s%.2d:%.2d:%.2d %s %s:%d: ", color[level], time.hour, time.minute, time.second, prefix[level], file, line);
+			i++;
+		}
+		printf("%c", buffer[i]);
+	}
+	printf("\n\033[0;0m");
 #endif // LI_OS_LINUX
 #ifdef LI_OS_WINDOWS
-	printf("%.2d:%.2d:%.2d %s %s:%d: %s\n", time.hour, time.minute, time.second, prefix[level], file, line, buffer);
+	// Print prefix.
+	printf("%.2d:%.2d:%.2d %s %s:%d: ", time.hour, time.minute, time.second, prefix[level], file, line);
+	for (U32 i = 0; buffer[i] != '\0'; i++) {
+		if (buffer[i] == '\n') {
+			printf("\n%.2d:%.2d:%.2d %s %s:%d: ", time.hour, time.minute, time.second, prefix[level], file, line);
+			i++;
+		}
+		printf("%c", buffer[i]);
+	}
+	printf("\n");
 #endif // LI_OS_WINDOWS
 }
