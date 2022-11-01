@@ -9,21 +9,28 @@
 
 struct LiArena {
 	void *pool;
+	// Offset from the beginning of pool.
 	U64 position;
+	// How much of pool has been commited.
 	U64 commit_pos;
+	// Max amount of memory reserved.
 	U64 max;
+	// Memory alignment.
 	U64 align;
 };
 
+// Decommit memory if possible.
 static void internal_liArenaSetPosition(LiArena *arena, U64 position)
 {
+	// Only push position backwards so no memory is memory is skipped.
 	if (arena->position > position) {
-
 		arena->position = position;
 
+		// Calculate decommit amount.
 		U64 decommit_position = liMemoryCalculateCommit(position);
 		U64 over_commited = arena->commit_pos - decommit_position;
 		over_commited -= over_commited % liMemoryCalculateCommit(1);
+		// Decommit if possible.
 		if (decommit_position > 0) {
 			liMemoryDecommit(arena->pool + decommit_position, over_commited);
 			arena->commit_pos -= over_commited;
@@ -52,22 +59,28 @@ void liArenaDestroy(LiArena *arena)
 
 void *liArenaPush(LiArena *arena, U64 size)
 {
+	// Align size.
 	U64 aligned_size = size;
 	aligned_size += arena->align - 1;
 	aligned_size -= aligned_size % arena->align;
 
+	// Save current arena position for return value.
+	U64 root_position = arena->position;
+
+	// Offset size within the pool.
 	arena->position += aligned_size;
 	if (arena->position > arena->commit_pos) {
 		liMemoryCommit(arena->pool, arena->position);
 		arena->commit_pos = liMemoryCalculateCommit(arena->position);
 	}
 
+	// Check for over allocation.
 	if (arena->commit_pos > arena->max) {
 		liLogWarn("Arena out of memory!");
 		return NULL;
 	}
 
-	return arena->pool + arena->position;
+	return arena->pool + root_position;
 }
 
 void *liArenaPushZero(LiArena *arena, U64 size)
