@@ -19,13 +19,18 @@ project "lithium"
 		"LI_BUILD_DLL"
 	}
 
-	links {
-		"vulkan"
-	}
-
+	filter "system:windows"
+		links {
+			"$(VULKAN_SDK)/lib/vulkan-1.lib"
+		}
+		includedirs {
+			"$(VULKAN_SDK)/include"
+		}
+		postbuildcommands { ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/testbed") }
 	filter "system:linux"
 		links {
-			"X11"
+			"X11",
+			"vulkan"
 		}
 
 	filter "configurations:Debug"
@@ -51,6 +56,9 @@ project "testbed"
 	links {
 		"lithium"
 	}
+
+	filter "system:windows"
+		includedirs { "$(VULKAN_SDK)/include" }
 
 	filter "configurations:Debug"
 		symbols "On"

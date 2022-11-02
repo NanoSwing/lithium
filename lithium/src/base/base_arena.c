@@ -32,7 +32,7 @@ static void internal_liArenaSetPosition(LiArena *arena, U64 position)
 		over_commited -= over_commited % liMemoryCalculateCommit(1);
 		// Decommit if possible.
 		if (decommit_position > 0) {
-			liMemoryDecommit(arena->pool + decommit_position, over_commited);
+			liMemoryDecommit((U8 *) arena->pool + decommit_position, over_commited);
 			arena->commit_pos -= over_commited;
 		}
 	}
@@ -80,7 +80,7 @@ void *liArenaPush(LiArena *arena, U64 size)
 		return NULL;
 	}
 
-	return arena->pool + root_position;
+	return (U8 *) arena->pool + root_position;
 }
 
 void *liArenaPushZero(LiArena *arena, U64 size)
