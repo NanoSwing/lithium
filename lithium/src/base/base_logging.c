@@ -2,6 +2,9 @@
 #include "platform/platform_time.h"
 #include "base/base_context_crack.h"
 
+#ifdef LI_OS_WINDOWS
+#include <Windows.h>
+#endif // LI_OS_WINDOWS
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -46,6 +49,18 @@ void liLog(LiLogLevel level, const char *file, U32 line, const char *format, ...
 	printf("\n\033[0;0m");
 #endif // LI_OS_LINUX
 #ifdef LI_OS_WINDOWS
+	const U32 RESET_COLOR = 7;
+	HANDLE console_handle = GetStdHandle(STD_OUTPUT_HANDLE);
+	U32 color[LI_LOG_LEVEL_COUNT] = {
+		64,
+		4,
+		6,
+		7,
+		1,
+		13
+	};
+	// Set output color
+	SetConsoleTextAttribute(console_handle, color[level]);
 	// Print prefix.
 	printf("%.2d:%.2d:%.2d %s %s:%d: ", time.hour, time.minute, time.second, prefix[level], file, line);
 	for (U32 i = 0; buffer[i] != '\0'; i++) {
@@ -56,5 +71,6 @@ void liLog(LiLogLevel level, const char *file, U32 line, const char *format, ...
 		printf("%c", buffer[i]);
 	}
 	printf("\n");
+	SetConsoleTextAttribute(console_handle, RESET_COLOR);
 #endif // LI_OS_WINDOWS
 }

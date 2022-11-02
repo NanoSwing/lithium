@@ -1,6 +1,7 @@
 workspace "Lithium"
 	architecture "x64"
 	configurations { "debug", "release" }
+	startproject "testbed"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
