@@ -39,6 +39,10 @@ void liLog(LiLogLevel level, const char *file, U32 line, const char *format, ...
 	};
 	// Print prefix.
 	printf("%s%.2d:%.2d:%.2d %s %s:%d: ", color[level], time.hour, time.minute, time.second, prefix[level], file, line);
+	if (buffer[i] == '\r') {
+		i++;
+		continue;
+	}
 	for (U32 i = 0; buffer[i] != '\0'; i++) {
 		if (buffer[i] == '\n') {
 			printf("\n%s%.2d:%.2d:%.2d %s %s:%d: ", color[level], time.hour, time.minute, time.second, prefix[level], file, line);
@@ -64,6 +68,10 @@ void liLog(LiLogLevel level, const char *file, U32 line, const char *format, ...
 	// Print prefix.
 	printf("%.2d:%.2d:%.2d %s %s:%d: ", time.hour, time.minute, time.second, prefix[level], file, line);
 	for (U32 i = 0; buffer[i] != '\0'; i++) {
+		if (buffer[i] == '\r') {
+			i++;
+			continue;
+		}
 		if (buffer[i] == '\n') {
 			printf("\n%.2d:%.2d:%.2d %s %s:%d: ", time.hour, time.minute, time.second, prefix[level], file, line);
 			i++;

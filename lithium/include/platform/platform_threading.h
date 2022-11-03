@@ -6,7 +6,7 @@
 #include "base/base_arena.h"
 
 // Thread handle.
-typedef U64 LiThread;
+typedef I64 LiThread;
 // Mutex handle.
 typedef struct LiMutex LiMutex;
 // Function ran by a thread.
@@ -14,8 +14,6 @@ typedef void *(*LiThreadFunc)(void *arg);
 
 // Starts a new thread and returns the handle. Arg will be passed to thread_func.
 LIAPI LiThread liThreadCreate(LiThreadFunc thread_func, void *arg);
-// Destroys thread, handing it back to the OS.
-LIAPI void liThreadDestroy(LiThread thread);
 // Waits until thread has finished its operation. Thread_func return value will be placed in output if output isn't NULL.
 LIAPI void liThreadWait(LiThread thread, void **output);
 // Gets thread handle of current thread.

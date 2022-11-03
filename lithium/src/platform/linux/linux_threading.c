@@ -17,7 +17,6 @@ LiThread liThreadCreate(LiThreadFunc thread_func, void *arg)
 	return (LiThread) thread;
 }
 
-void liThreadDestroy(LiThread thread) { (void) thread; }
 void liThreadWait(LiThread thread, void **output) { pthread_join(thread, output); }
 LiThread liThreadGetSelf(void) { return pthread_self(); }
 
