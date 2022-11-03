@@ -1,7 +1,5 @@
 #include <lithium.h>
 
-#include <Windows.h>
-
 int main(void)
 {
 	LiArena *arena = liArenaCreate(liGigabytes(4), 8);

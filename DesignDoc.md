@@ -3,7 +3,7 @@
 - [X] Type definitions
 - [X] Context cracking
 - [X] Memory arena
-- [ ] Strings
+- [X] Strings
 - [ ] Util macros
 - [X] API defines
 - [X] Logging
