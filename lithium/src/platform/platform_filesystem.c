@@ -1,5 +1,6 @@
 #include "platform/platform_filesystem.h"
-#include "base/base_logging.h"
+#include "base/base_error.h"
+#include "base/base_string.h"
 
 #include <stdio.h>
 
@@ -7,7 +8,7 @@ char *liFileRead(LiArena *arena, const char *filename)
 {
 	FILE *fp = fopen(filename, "rb");
 	if (!fp) {
-		liLogError("Cannot open file '%s'\n", filename);
+		liErrorFormat(LI_ERROR_SEVERITY_MEDIUM, "Failed to open file '%s'!", filename);
 		return NULL;
 	}
 	// Get file length.
@@ -38,7 +39,7 @@ void liFileWrite(const char *filename, const LiString content, LiFileMode write_
 	}
 	FILE *fp = fopen(filename, write_type);
 	if (!fp) {
-		liLogError("Cannot create file '%s'\n", filename);
+		liErrorFormat(LI_ERROR_SEVERITY_MEDIUM, "Failed to create file '%s'!", filename);
 		return;
 	}
 	fwrite(content.c_str, content.length, 1, fp);
@@ -49,7 +50,7 @@ void liFileCreate(const char *filename)
 {
 	FILE *fp = fopen(filename, "wb");
 	if (!fp) {
-		liLogError("Cannot create file '%s'\n", filename);
+		liErrorFormat(LI_ERROR_SEVERITY_MEDIUM, "Failed to create file '%s'!", filename);
 		return;
 	}
 	fclose(fp);
@@ -68,7 +69,7 @@ void liFileAppend(const char *filename, const LiString content, LiFileMode appen
 	}
 	FILE *fp = fopen(filename, write_type);
 	if (!fp) {
-		liLogError("Cannot open file '%s'\n", filename);
+		liErrorFormat(LI_ERROR_SEVERITY_MEDIUM, "Failed to open file '%s'!", filename);
 		return;
 	}
 	fwrite(content.c_str, content.length, 1, fp);

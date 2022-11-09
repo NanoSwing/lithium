@@ -1,4 +1,6 @@
 #include "base/base_arena.h"
+#include "base/base_error.h"
+#include "base/base_string.h"
 #include "base/base_types.h"
 #include "base/base_logging.h"
 #include "platform/platform_threading.h"
@@ -76,7 +78,7 @@ void *liArenaPush(LiArena *arena, U64 size)
 
 	// Check for over allocation.
 	if (arena->commit_pos > arena->max) {
-		liLogWarn("Arena out of memory!");
+		liError(LI_ERROR_SEVERITY_LIGHT, "Arena out of memory!");
 		return NULL;
 	}
 
@@ -90,8 +92,15 @@ void *liArenaPushZero(LiArena *arena, U64 size)
 	return mem;
 }
 
-void liArenaPop(LiArena *arena, U64 size) { internal_liArenaSetPosition(arena, arena->position - size); }
-void liArenaReset(LiArena *arena) { internal_liArenaSetPosition(arena, 0); }
+void liArenaPop(LiArena *arena, U64 size)
+{
+	internal_liArenaSetPosition(arena, arena->position - size);
+}
+
+void liArenaReset(LiArena *arena)
+{
+	internal_liArenaSetPosition(arena, 0);
+}
 
 LiArenaTemp liArenaTempBegin(LiArena *arena)
 {

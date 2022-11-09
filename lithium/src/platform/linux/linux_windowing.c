@@ -1,4 +1,5 @@
 #include "base/base_context_crack.h"
+#include "base/base_error.h"
 #ifdef LI_OS_LINUX
 
 #define VK_USE_PLATFORM_XCB_KHR
@@ -27,7 +28,7 @@ LiWindow *liWindowCreate(LiArena *arena, U32 width, U32 height, const char *titl
 	I32 screenp = 0;
 	window->connection = xcb_connect(NULL, &screenp);
 	if (xcb_connection_has_error(window->connection)) {
-		liLogError("Failed to connect to X server using XCB.");
+		liError(LI_ERROR_SEVERITY_MEDIUM, "Failed to connect to X server using XCB!");
 		return NULL;
 	}
 
@@ -163,7 +164,7 @@ VkSurfaceKHR liWindowGetSurface(const LiWindow *window, VkInstance instance)
 
 	VkResult result = vkCreateXcbSurfaceKHR(instance, &surface_create_info, NULL, &surface);
 	if (result != VK_SUCCESS) {
-		liLogError("Failed to create XCB vulkan surface!");
+		liError(LI_ERROR_SEVERITY_MEDIUM, "Failed to create XCB vulkan surface!");
 		return NULL;
 	}
 

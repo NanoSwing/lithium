@@ -1,4 +1,6 @@
 #include "base/base_context_crack.h"
+#include "base/base_error.h"
+#include "base/base_string.h"
 #ifdef LI_OS_LINUX
 
 #include "platform/platform_memory.h"
@@ -25,6 +27,10 @@ void *liMemoryReserve(U64 size)
 {
 	U64 snapped = internal_liSnapToPages(size + sizeof(U64));
 	U64 *ptr = mmap(NULL, snapped, PROT_NONE, MAP_PRIVATE | MAP_ANON, -1, 0);
+	if (ptr == NULL) {
+		liError(LI_ERROR_SEVERITY_MEDIUM, "OS memory reservation failed!");
+		return NULL;
+	}
 	mprotect(ptr, sizeof(U64), PROT_READ | PROT_WRITE);
 	*ptr = snapped;
 
@@ -33,6 +39,10 @@ void *liMemoryReserve(U64 size)
 
 void liMemoryCommit(void *ptr, U64 size)
 {
+	if (ptr == NULL) {
+		liError(LI_ERROR_SEVERITY_LIGHT, "OS memory commit was passed a null pointer!");
+		return;
+	}
 	void *correct_ptr = ptr - sizeof(U64);
 	U64 snapped = internal_liSnapToPages(size + sizeof(U64));
 	mprotect(correct_ptr, snapped, PROT_READ | PROT_WRITE);
