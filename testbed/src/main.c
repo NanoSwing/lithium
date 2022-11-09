@@ -18,28 +18,19 @@ void errCallback(const LiError error)
 
 I32 main(void)
 {
+	liErrorInit();
 	liErrorCallback(errCallback);
+	LiArena *arena = liArenaCreate(liGigabytes(4), 8);
 
-	liError(LI_ERROR_SEVERITY_LIGHT, "Warn");
-	liErrorFormat(LI_ERROR_SEVERITY_MEDIUM, "Error, %.5f", 3.14159f);
-	liError(LI_ERROR_SEVERITY_HEAVY, "Fatal");
+	LiWindow *window = liWindowCreate(arena, 800, 600, "Lithium window", false);
 
-	U8 count = 0;
-	const LiError *errs = liErrorGet(&count);
-	for (U8 i = 0; i < count; i++) {
-		liLogDebug("%s, %d", errs[i].message.c_str, errs[i].severity);
+	while (!liWindowClosed(window)) {
+		liWindowPollEvents(window);
 	}
 
-	/* LiArena *arena = liArenaCreate(liGigabytes(4), 8); */
-
-	/* LiWindow *window = liWindowCreate(arena, 800, 600, "Lithium window", false); */
-
-	/* while (!liWindowClosed(window)) { */
-	/* 	liWindowPollEvents(window); */
-	/* } */
-
-	/* // Cleanup */
-	/* liWindowDestroy(window); */
-	/* liArenaDestroy(arena); */
+	// Cleanup
+	liWindowDestroy(window);
+	liArenaDestroy(arena);
+	liErrorCleanup();
 	return 0;
 }

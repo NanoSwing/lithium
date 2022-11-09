@@ -30,12 +30,22 @@ static void internal_liErrorReport(LiError error)
 	}
 }
 
+void liErrorInit(void)
+{
+	for (U8 i = 0; i < 2; i++) {
+		err_arena[i] = liArenaCreate(liMegabytes(512), 8);
+	}
+}
+
+void liErrorCleanup(void)
+{
+	for (U8 i = 0; i < 2; i++) {
+		liArenaDestroy(err_arena[i]);
+	}
+}
+
 void liErrorFormat(LiErrorSeverity severity, const char *message, ...)
 {
-	if (err_arena[curr_buff] == NULL) {
-		err_arena[curr_buff] = liArenaCreate(liMegabytes(512), 8);
-	}
-
 	va_list ptr;
 	va_start(ptr, message);
 	char buff[1024];

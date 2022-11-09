@@ -18,6 +18,8 @@ typedef struct {
 
 typedef void (*LiErrorCallback)(const LiError error);
 
+LIAPI void liErrorInit(void);
+LIAPI void liErrorCleanup(void);
 LIAPI void liErrorFormat(LiErrorSeverity severity, const char *message, ...); 
 LIAPI void liError(LiErrorSeverity severity, char *message); 
 LIAPI const LiError *liErrorGet(U8 *count);
