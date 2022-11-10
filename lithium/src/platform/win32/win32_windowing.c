@@ -85,11 +85,15 @@ LiWindow *liWindowCreate(LiArena *arena, U32 width, U32 height, const char *titl
 
 void liWindowDestroy(LiWindow *window)
 {
+	assert(window != NULL && "Window can't be null!");
+
 	DestroyWindow(window->window);
 }
 
 void liWindowPollEvents(LiWindow *window)
 {
+	assert(window != NULL && "Window can't be null!");
+
 	MSG msg = { 0 };
 	while (PeekMessageA(&msg, NULL, 0, 0, PM_REMOVE)) {
 		if (msg.message == WM_QUIT) {
@@ -103,6 +107,8 @@ void liWindowPollEvents(LiWindow *window)
 
 B8 liWindowClosed(const LiWindow *window)
 {
+	assert(window != NULL && "Window can't be null!");
+
 	return window->closed;
 }
 

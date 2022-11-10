@@ -63,9 +63,6 @@ void liError(LiErrorSeverity severity, char *message)
 const LiError *liErrorGet(U8 *count)
 {
 	*count = err_count;
-	if (err_arena[curr_buff] != NULL) {
-		liArenaReset(err_arena[curr_buff]);
-	}
 	// Swap buffers.
 	curr_buff = !curr_buff;
 	// Reset error count.

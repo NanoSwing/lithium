@@ -8,6 +8,7 @@
 
 #include <stddef.h>
 #include <string.h>
+#include <assert.h>
 
 struct LiArena {
 	void *pool;
@@ -55,12 +56,16 @@ LiArena *liArenaCreate(U64 size, U64 align)
 
 void liArenaDestroy(LiArena *arena)
 {
+	assert(arena != NULL && "Arena can't be null!");
+
 	liMemoryRelease(arena->pool);
 	liMemoryRelease(arena);
 }
 
 void *liArenaPush(LiArena *arena, U64 size)
 {
+	assert(arena != NULL && "Arena can't be null!");
+
 	// Align size.
 	U64 aligned_size = size;
 	aligned_size += arena->align - 1;
@@ -87,6 +92,8 @@ void *liArenaPush(LiArena *arena, U64 size)
 
 void *liArenaPushZero(LiArena *arena, U64 size)
 {
+	assert(arena != NULL && "Arena can't be null!");
+
 	void *mem = liArenaPush(arena, size);
 	memset(mem, 0, size);
 	return mem;
@@ -94,16 +101,22 @@ void *liArenaPushZero(LiArena *arena, U64 size)
 
 void liArenaPop(LiArena *arena, U64 size)
 {
+	assert(arena != NULL && "Arena can't be null!");
+
 	internal_liArenaSetPosition(arena, arena->position - size);
 }
 
 void liArenaReset(LiArena *arena)
 {
+	assert(arena != NULL && "Arena can't be null!");
+
 	internal_liArenaSetPosition(arena, 0);
 }
 
 LiArenaTemp liArenaTempBegin(LiArena *arena)
 {
+	assert(arena != NULL && "Arena can't be null!");
+
 	return (LiArenaTemp) { arena, arena->position };
 }
 

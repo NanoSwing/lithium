@@ -9,6 +9,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <unistd.h>
+#include <assert.h>
 
 // Reserve memory  - mmap
 // Commit memory   - madvise
@@ -39,6 +40,8 @@ void *liMemoryReserve(U64 size)
 
 void liMemoryCommit(void *ptr, U64 size)
 {
+	assert(ptr != NULL && "Pointer can't be null!");
+
 	if (ptr == NULL) {
 		liError(LI_ERROR_SEVERITY_LIGHT, "OS memory commit was passed a null pointer!");
 		return;
@@ -51,12 +54,16 @@ void liMemoryCommit(void *ptr, U64 size)
 
 void liMemoryDecommit(void *ptr, U64 size)
 {
+	assert(ptr != NULL && "Pointer can't be null!");
+
 	mprotect(ptr, size, PROT_NONE);
 	madvise(ptr, size, MADV_DONTNEED);
 }
 
 void liMemoryRelease(void *ptr)
 {
+	assert(ptr != NULL && "Pointer can't be null!");
+
 	void *correct_ptr = ptr - sizeof(U64);
 	U64 size = *(U64 *) correct_ptr;
 	munmap(correct_ptr, size);

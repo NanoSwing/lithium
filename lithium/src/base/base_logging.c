@@ -78,7 +78,7 @@ void liLog(LiLogLevel level, const char *file, U32 line, const char *format, ...
 		}
 		printf("%c", buffer[i]);
 	}
-	printf("\n");
+	printf("\033[0;0m\n");
 	SetConsoleTextAttribute(console_handle, RESET_COLOR);
 #endif // LI_OS_WINDOWS
 }

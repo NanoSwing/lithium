@@ -4,6 +4,7 @@
 #include "platform/platform_memory.h"
 
 #include <Windows.h>
+#include <assert.h>
 
 static U64 internal_liSnapToPages(U64 value)
 {
@@ -24,17 +25,23 @@ void *liMemoryReserve(U64 size)
 
 void liMemoryCommit(void *ptr, U64 size)
 {
+	assert(ptr != NULL && "Pointer can't be null!");
+
 	U64 snapped = internal_liSnapToPages(size);
 	VirtualAlloc(ptr, snapped, MEM_COMMIT, PAGE_READWRITE);
 }
 
 void liMemoryDecommit(void *ptr, U64 size)
 {
+	assert(ptr != NULL && "Pointer can't be null!");
+
 	VirtualFree(ptr, size, MEM_DECOMMIT);
 }
 
 void liMemoryRelease(void *ptr)
 {
+	assert(ptr != NULL && "Pointer can't be null!");
+
 	VirtualFree(ptr, 0, MEM_RELEASE);
 }
 

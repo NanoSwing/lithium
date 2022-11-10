@@ -1,4 +1,5 @@
 #include "base/base_error.h"
+#include "platform/platform_windowing.h"
 #include <lithium.h>
 
 void errCallback(const LiError error)

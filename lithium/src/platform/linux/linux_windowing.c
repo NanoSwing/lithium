@@ -10,6 +10,7 @@
 #include <xcb/xcb.h>
 #include <string.h>
 #include <malloc.h>
+#include <assert.h>
 
 struct LiWindow {
 	xcb_connection_t *connection;
@@ -130,6 +131,8 @@ void liWindowDestroy(LiWindow *window) { xcb_destroy_window(window->connection, 
 
 void liWindowPollEvents(LiWindow *window)
 {
+	assert(window != NULL && "Window can't be null!"); 
+
 	xcb_generic_event_t *event;
 	xcb_client_message_event_t *cm;
 
