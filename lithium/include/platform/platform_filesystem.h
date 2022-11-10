@@ -11,14 +11,14 @@ typedef enum {
 	LI_FILE_MODE_NORMAL,
 } LiFileMode;
 
-// Read contents of filename. Returns NULL if operation fails, returns a pointer otherwise.
+// Read contents of filename. Returns NULL if file coudln't be opened, returns a pointer otherwise.
 LIAPI char *liFileRead(LiArena *arena, const char *filename);
-// Write content to filename.
-LIAPI void liFileWrite(const char *filename, const LiString content, LiFileMode write_mode);
-// Create a file at filename.
-LIAPI void liFileCreate(const char *filename);
-// Append content to filename.
-LIAPI void liFileAppend(const char *filename, const LiString content, LiFileMode append_mode);
+// Write content to filename. Returns false if file couldn't be opened.
+LIAPI B8 liFileWrite(const char *filename, const LiString content, LiFileMode write_mode);
+// Create a file at filename. Return false if file couldn't be created.
+LIAPI B8 liFileCreate(const char *filename);
+// Append content to filename. Return false if file couldn't be opened or created.
+LIAPI B8 liFileAppend(const char *filename, const LiString content, LiFileMode append_mode);
 // Returns true if filename exists.
 LIAPI B8 liFileExists(const char *filename);
 

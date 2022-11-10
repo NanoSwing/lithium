@@ -1,5 +1,4 @@
 #include "base/base_arena.h"
-#include "base/base_error.h"
 #include "base/base_string.h"
 #include "base/base_types.h"
 #include "base/base_logging.h"
@@ -83,7 +82,6 @@ void *liArenaPush(LiArena *arena, U64 size)
 
 	// Check for over allocation.
 	if (arena->commit_pos > arena->max) {
-		liError(LI_ERROR_SEVERITY_LIGHT, "Arena out of memory!");
 		return NULL;
 	}
 

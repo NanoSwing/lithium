@@ -4,11 +4,11 @@
 #include "base/base_types.h"
 #include "base/base_defines.h"
 
-// Reserve size amount of bytes.
+// Reserve size amount of bytes. Return NULL on failure.
 LIAPI void *liMemoryReserve(U64 size);
-// Commit size amount bytes at ptr location in memory.
+// Commit size amount bytes at ptr location in memory. Returns false on failure.
 LIAPI void liMemoryCommit(void *ptr, U64 size);
-// Decommit size amount bytes at ptr location in memory.
+// Decommit size amount bytes at ptr location in memory. Returns false on failure.
 LIAPI void liMemoryDecommit(void *ptr, U64 size);
 // Release reserved memory.
 LIAPI void liMemoryRelease(void *ptr);

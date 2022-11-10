@@ -1,5 +1,4 @@
 #include "platform/platform_filesystem.h"
-#include "base/base_error.h"
 #include "base/base_string.h"
 
 #include <stdio.h>
@@ -8,7 +7,6 @@ char *liFileRead(LiArena *arena, const char *filename)
 {
 	FILE *fp = fopen(filename, "rb");
 	if (!fp) {
-		liErrorFormat(LI_ERROR_SEVERITY_MEDIUM, "Failed to open file '%s'!", filename);
 		return NULL;
 	}
 	// Get file length.
@@ -26,7 +24,7 @@ char *liFileRead(LiArena *arena, const char *filename)
 	return buffer;
 }
 
-void liFileWrite(const char *filename, const LiString content, LiFileMode write_mode)
+B8 liFileWrite(const char *filename, const LiString content, LiFileMode write_mode)
 {
 	char *write_type = NULL;
 	switch (write_mode) {
@@ -39,24 +37,26 @@ void liFileWrite(const char *filename, const LiString content, LiFileMode write_
 	}
 	FILE *fp = fopen(filename, write_type);
 	if (!fp) {
-		liErrorFormat(LI_ERROR_SEVERITY_MEDIUM, "Failed to create file '%s'!", filename);
-		return;
+		return false;
 	}
 	fwrite(content.c_str, content.length, 1, fp);
 	fclose(fp);
+
+	return true;
 }
 
-void liFileCreate(const char *filename)
+B8 liFileCreate(const char *filename)
 {
 	FILE *fp = fopen(filename, "wb");
 	if (!fp) {
-		liErrorFormat(LI_ERROR_SEVERITY_MEDIUM, "Failed to create file '%s'!", filename);
-		return;
+		return false;
 	}
 	fclose(fp);
+
+	return true;
 }
 
-void liFileAppend(const char *filename, const LiString content, LiFileMode append_mode)
+B8 liFileAppend(const char *filename, const LiString content, LiFileMode append_mode)
 {
 	char *write_type = NULL;
 	switch (append_mode) {
@@ -69,11 +69,12 @@ void liFileAppend(const char *filename, const LiString content, LiFileMode appen
 	}
 	FILE *fp = fopen(filename, write_type);
 	if (!fp) {
-		liErrorFormat(LI_ERROR_SEVERITY_MEDIUM, "Failed to open file '%s'!", filename);
-		return;
+		return false;
 	}
 	fwrite(content.c_str, content.length, 1, fp);
 	fclose(fp);
+
+	return true;
 }
 
 B8 liFileExists(const char *filename)
